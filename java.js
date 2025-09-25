@@ -1,5 +1,5 @@
-let firstNumber = 0;
-let secondNumber = 0;
+let firstNumber = "";
+let secondNumber = "";
 let operator = "";
 
 const add = function(a, b) {
@@ -19,28 +19,52 @@ const divide = function(a, b) {
 };
 
 const operate = function(firstNumber, secondNumber,operator) {
-	if(operator = "+") {
-		add(firstNumber,secondNumber)
+	if(operator ==="+") {
+		return add(firstNumber,secondNumber)
 	};
-	if(operator = "-") {
-		subtract(firstNumber,secondNumber)
+	if(operator === "-") {
+		return subtract(firstNumber,secondNumber)
 	};
-	if(operator = "*") {
-		multiply(firstNumber,secondNumber)
+	if(operator === "*") {
+		return multiply(firstNumber,secondNumber)
 	};
-	if(operator = "/") {
-		divide(firstNumber,secondNumber)
+	if(operator === "/") {
+		return divide(firstNumber,secondNumber)
 	};
+	return "unknown operator";
 };
 
 const numbers = document.querySelectorAll(".number");
+const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
 
 numbers.forEach(number => {
-  number.addEventListener("click", () => {
-	display.textContent += number.id;
-	firstNumber += number.id;
-	console.log(firstNumber);
-	console.log(display.textContent);
-  });
+  number.addEventListener("click", () => {	
+	display.textContent += number.textContent;
+	if(operator == "") {
+		firstNumber += number.textContent;
+	} else {
+		secondNumber += number.textContent;
+	};
+	});
+});
+
+symbols.forEach(symbol => {
+  symbol.addEventListener("click", () => {	
+
+	display.textContent += symbol.textContent;
+	symbols.forEach(symbol => {
+		symbol.disabled = true;
+	});
+	
+	if(symbol.textContent !== "=") {
+	operator = symbol.textContent;
+	};
+
+	if(symbol.textContent == "=") {
+		firstNumber = Number(firstNumber);
+		secondNumber = Number(secondNumber);
+		display.textContent = operate(firstNumber, secondNumber, operator);
+		};
+	});
 });
