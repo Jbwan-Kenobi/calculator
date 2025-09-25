@@ -39,32 +39,46 @@ const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
 
 numbers.forEach(number => {
-  number.addEventListener("click", () => {	
-	display.textContent += number.textContent;
-	if(operator == "") {
-		firstNumber += number.textContent;
-	} else {
-		secondNumber += number.textContent;
-	};
+	number.addEventListener("click", () => {	
+		display.textContent += number.textContent;
+		if(operator == "") {
+			firstNumber += number.textContent;
+		} else {
+			secondNumber += number.textContent;
+		};
 	});
 });
 
 symbols.forEach(symbol => {
-  symbol.addEventListener("click", () => {	
+	symbol.addEventListener("click", () => {	
 
-	display.textContent += symbol.textContent;
-	symbols.forEach(symbol => {
-		symbol.disabled = true;
-	});
-	
-	if(symbol.textContent !== "=") {
-	operator = symbol.textContent;
-	};
+		if(symbol.textContent == "C"){
+			firstNumber = "";
+			secondNumber = "";
+			operator = "";
+			display.textContent = "";
+		} else {
 
-	if(symbol.textContent == "=") {
-		firstNumber = Number(firstNumber);
-		secondNumber = Number(secondNumber);
-		display.textContent = operate(firstNumber, secondNumber, operator);
+			display.textContent += " " + symbol.textContent + " ";
+
+			if(symbol.textContent !== "=") {
+				operator = symbol.textContent;
+				symbols.forEach(symbol => {
+				symbol.disable = true;
+				});
+			};
+
+			if(symbol.textContent == "=") {
+				firstNumber = Number(firstNumber);
+				secondNumber = Number(secondNumber);
+				let answer = operate(firstNumber, secondNumber, operator);
+				display.textContent = answer;
+				firstNumber = answer;
+				secondNumber = "";
+				console.log("first: " + firstNumber, " second: " + secondNumber, "operator: " + operator + " Answer: " + answer)
+			};
+
 		};
+
 	});
 });
