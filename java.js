@@ -63,19 +63,15 @@ symbols.forEach(symbol => {
 
 			if(symbol.textContent !== "=") {
 				operator = symbol.textContent;
-				symbols.forEach(symbol => {
-				symbol.disable = true;
-				});
-			};
+			};		
 
 			if(symbol.textContent == "=") {
 				firstNumber = Number(firstNumber);
 				secondNumber = Number(secondNumber);
-				let answer = operate(firstNumber, secondNumber, operator);
+				let answer = Math.round(operate(firstNumber, secondNumber, operator)*10)/10;
 				display.textContent = answer;
 				firstNumber = answer;
 				secondNumber = "";
-				console.log("first: " + firstNumber, " second: " + secondNumber, "operator: " + operator + " Answer: " + answer)
 			};
 
 		};
