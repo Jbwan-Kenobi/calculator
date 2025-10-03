@@ -2,19 +2,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: lightgrey;
+    background-color: black;
     justify-items: center;
     font-size: 50px;
-}
-
-#display {
-    width: 450px;
-    height: 100px;
-    border-radius: 15px;
-    margin: 10px;
-    font-size: 25;
-    text-align: center;
-    background-color: green;
 }
 
 #container {
@@ -23,6 +13,23 @@ body {
     width: 100%;
     max-width: 500px;
     margin: auto;
+    background-color: lightblue;
+    border: 5px, solid, orangered;
+    border-radius: 15px;
+    justify-content: center;
+}
+
+#display {
+    display: flex;
+    width: 450px;
+    height: 100px;
+    border-radius: 15px;
+    margin: 10px;
+    font-size: 25px;
+    text-align: center;
+    background-color: palevioletred;
+    justify-content: center;
+    box-shadow: inset 5px 5px 5px black;
 }
 
 button {
@@ -35,6 +42,6 @@ button {
 }
 
 button:hover {
-    color: blue;
-    border: 5px solid blue
+    color: orangered;
+    border: 5px solid orangered;
 }
