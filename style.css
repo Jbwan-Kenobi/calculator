@@ -14,7 +14,7 @@ body {
     max-width: 500px;
     margin: auto;
     background-color: lightblue;
-    border: 5px, solid, orangered;
+    border: 5px solid orangered;
     border-radius: 15px;
     justify-content: center;
 }
@@ -25,11 +25,19 @@ body {
     height: 100px;
     border-radius: 15px;
     margin: 10px;
-    font-size: 25px;
+    font-size: 50px;
     text-align: center;
     background-color: palevioletred;
     justify-content: center;
+    align-items: center;
     box-shadow: inset 5px 5px 5px black;
+}
+
+#buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
