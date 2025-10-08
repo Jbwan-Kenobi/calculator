@@ -30,7 +30,7 @@ body {
     background-color: palevioletred;
     justify-content: center;
     align-items: center;
-    box-shadow: inset 5px 5px 5px black;
+    box-shadow: inset 3px 3px 3px black;
 }
 
 #buttons {
@@ -47,6 +47,7 @@ button {
     border-radius: 15px;
     margin: 10px;
     font-size: 25px;
+    box-shadow: 2px 2px 2px black;
 }
 
 button:hover {

@@ -47,21 +47,21 @@ numbers.forEach(number => {
 			display.textContent = "Really!"
 		} else {
 
-		if(firstOperator == "") {
-			firstNumber += number.textContent;
-			display.textContent = firstNumber;
-		} else {
-			secondNumber += number.textContent;
-			display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-		};
-		//resets calculator when another number is pressed after equals
-		if(answer !== 0) {
-			firstNumber = number.textContent;
-			secondNumber = "";
-			firstOperator = "";
-			answer = 0;
-			display.textContent = firstNumber;
-		};
+			if(firstOperator == "") {
+				firstNumber += number.textContent;
+				display.textContent = firstNumber;
+			} else {
+				secondNumber += number.textContent;
+				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+			};
+			//resets calculator when another number is pressed after equals
+			if(answer !== 0) {
+				firstNumber = number.textContent;
+				secondNumber = "";
+				firstOperator = "";
+				answer = 0;
+				display.textContent = firstNumber;
+			};
 
 		};
 
