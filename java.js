@@ -2,6 +2,7 @@ let firstNumber = "";
 let secondNumber = "";
 let firstOperator = "";
 let secondOperator = "";
+let answer = 0;
 
 const add = function(a, b) {
 	return  a + b
@@ -41,21 +42,35 @@ var display = document.getElementById("display");
 
 numbers.forEach(number => {
 	number.addEventListener("click", () => {	
-		/*display.textContent += number.textContent;*/
+		// Divide by 0 response
+		if(firstNumber !== "" && firstOperator == "/" && number.textContent == "0") {
+			display.textContent = "Really!"
+		} else {
+
 		if(firstOperator == "") {
 			firstNumber += number.textContent;
 			display.textContent = firstNumber;
 		} else {
 			secondNumber += number.textContent;
-			display.textContent += secondNumber;
+			display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
 		};
+		//resets calculator when another number is pressed after equals
+		if(answer !== 0) {
+			firstNumber = number.textContent;
+			secondNumber = "";
+			firstOperator = "";
+			answer = 0;
+			display.textContent = firstNumber;
+		};
+
+		};
+
 	});
 });
 
 symbols.forEach(symbol => {
-	symbol.addEventListener("click", () => {	
-		console.log(firstOperator)
-
+	symbol.addEventListener("click", () => {
+		//delete last character
 		if(symbol.textContent =="Del") {
 			if(firstOperator == "" && secondNumber == "") {
 				firstNumber = firstNumber.slice(0, -1);
@@ -69,11 +84,13 @@ symbols.forEach(symbol => {
 			};
 			
 		} else {
-
+			//clear all from the calculator
 			if(symbol.textContent == "C" || firstNumber == "") {
 				firstNumber = "";
 				secondNumber = "";
 				firstOperator = "";
+				secondOperator = "";
+				answer = 0;
 				display.textContent = "";
 			} else {
 
@@ -85,31 +102,29 @@ symbols.forEach(symbol => {
 				else {
 					secondOperator = symbol.textContent;
 				};
-
-				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "="){
+				//do the calculation
+				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
-					let answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
+					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer + " " + symbol.textContent + " ";
 					firstNumber = answer;
 					secondNumber = "";
 					firstOperator = secondOperator;
 					secondOperator = ""
-					console.log("1st " + firstNumber + " 2nd " + secondNumber + " =Op " + firstOperator)
 				};
-
+				//if equals is pressed
 				if(symbol.textContent == "=" && secondNumber !=="") {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
-					let answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
+					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer;
 					firstNumber = answer;
 					secondNumber = "";
 					firstOperator = "";
 					secondOperator = "";
-					console.log("=1st " + firstNumber + " =2nd " + secondNumber + " =Op " + firstOperator)
 				};
 
 			};
