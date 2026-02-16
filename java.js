@@ -3,6 +3,7 @@ let secondNumber = "";
 let firstOperator = "";
 let secondOperator = "";
 let answer = 0;
+let state = "empty";
 
 const add = function(a, b) {
 	return  a + b
@@ -48,12 +49,23 @@ numbers.forEach(number => {
 			display.textContent = "Really!"
 		} else {
 
+			if(state === "resultShown") {
+    			// reset for new calculation
+    			firstNumber = "";
+    			secondNumber = "";
+    			firstOperator = "";
+    			answer = 0;
+    			state = "empty";
+			}
+
 			if(firstOperator == "") {
 				firstNumber += number.textContent;
 				display.textContent = firstNumber;
+				state = "typingFirst"
 			} else {
 				secondNumber += number.textContent;
 				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+				state = "typingSecond"
 			};
 			//resets calculator when another number is pressed after equals
 			/*if(answer !== 0) {
@@ -100,15 +112,18 @@ symbols.forEach(symbol => {
 				secondOperator = "";
 				answer = 0;
 				display.textContent = "";
+				state = "empty"
 			} else {
 
 				display.textContent += " " + symbol.textContent + " ";
 
 				if(symbol.textContent !== "=" && firstOperator == "") {
 					firstOperator = symbol.textContent;
+					state = "operatorSelected"
 					}
 				else {
 					secondOperator = symbol.textContent;
+					state = "operatorSelected"
 				};
 				//do the calculation
 				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
@@ -117,10 +132,11 @@ symbols.forEach(symbol => {
 					calc = firstOperator;
 					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer + " " + symbol.textContent + " ";
-					firstNumber = answer;
+					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = secondOperator;
 					secondOperator = ""
+					state = "resultShown"
 				};
 				//if equals is pressed
 				if(symbol.textContent == "=" && secondNumber !=="") {
@@ -129,10 +145,11 @@ symbols.forEach(symbol => {
 					calc = firstOperator;
 					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer;
-					firstNumber = answer;
+					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = "";
 					secondOperator = "";
+					state = "resultShown"
 				};
 
 			};
@@ -145,16 +162,28 @@ symbols.forEach(symbol => {
 document.addEventListener('keydown', (event)=> {
 	if(/^-?\d+(\.\d+)?$/.test(event.key) == true) {
 	console.log(/^-?\d+(\.\d+)?$/.test(event.key));
-		if(firstNumber !== "" && firstOperator == "/" && number.textContent == "0") {
+		if(firstNumber !== "" && firstOperator == "/" && event.key == "0") {
 				display.textContent = "Really!"
 		} else {
+
+			if(state === "resultShown") {
+    			// reset for new calculation
+    			firstNumber = "";
+    			secondNumber = "";
+    			firstOperator = "";
+    			answer = 0;
+				display.textContent = "";
+    			state = "empty";
+			}
 
 			if(firstOperator == "") {
 				firstNumber += event.key;
 				display.textContent = firstNumber;
+				state = "typingFirst";
 			} else {
 				secondNumber += event.key;
 				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+				state = "typingSecond";
 			};
 		};
 	} else if (/[+\-*/=()^~%c]/.test(event.key) == true || event.key == "Enter") {
@@ -185,15 +214,18 @@ document.addEventListener('keydown', (event)=> {
 				secondOperator = "";
 				answer = 0;
 				display.textContent = "";
+				state = "empty";
 			} else {
 
 				display.textContent += " " + event.key + " ";
 
 				if(event.key !== "=" && firstOperator == "") {
 					firstOperator = event.key;
+					state = "operatorSelected";
 					}
 				else {
 					secondOperator = event.key;
+					state = "operatorSelected";
 				};
 				//do the calculation
 				if(firstNumber !== "" && secondNumber !== "" && event.key !== "=") {
@@ -202,10 +234,11 @@ document.addEventListener('keydown', (event)=> {
 					calc = firstOperator;
 					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer + " " + event.key + " ";
-					firstNumber = answer;
+					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = secondOperator;
 					secondOperator = ""
+					state = "resultShown";
 				};
 				//if equals is pressed
 				if(event.key == "=" && secondNumber !==""|| event.key == "Enter" && secondNumber !== "") {
@@ -214,10 +247,11 @@ document.addEventListener('keydown', (event)=> {
 					calc = firstOperator;
 					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
 					display.textContent = answer;
-					firstNumber = answer;
+					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = "";
 					secondOperator = "";
+					state = "resultShown";
 				};
 
 			};
