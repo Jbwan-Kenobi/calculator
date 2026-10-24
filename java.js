@@ -5,6 +5,16 @@ let secondOperator = "";
 let answer = 0;
 let state = "empty";
 
+const allClear = function() {
+	firstNumber = "";
+	secondNumber = "";
+	firstOperator = "";
+	secondOperator = "";
+	answer = 0;
+	state = "empty";
+	display.textContent = "";
+};
+
 const add = function(a, b) {
 	return  a + b
 };
@@ -106,13 +116,8 @@ symbols.forEach(symbol => {
 
 			//clear all from the calculator
 			if(symbol.textContent == "C" || firstNumber == "") {
-				firstNumber = "";
-				secondNumber = "";
-				firstOperator = "";
-				secondOperator = "";
-				answer = 0;
-				display.textContent = "";
-				state = "empty"
+				allClear();
+
 			} else {
 
 				display.textContent += " " + symbol.textContent + " ";
@@ -207,13 +212,7 @@ document.addEventListener('keydown', (event)=> {
 
 			//clear all from the calculator
 			if(event.key.toLowerCase() === "c" || firstNumber === "") {
-				firstNumber = "";
-				secondNumber = "";
-				firstOperator = "";
-				secondOperator = "";
-				answer = 0;
-				display.textContent = "";
-				state = "empty";
+				allClear()
 			} else {
 
 				if (event.key !== "Enter") {
