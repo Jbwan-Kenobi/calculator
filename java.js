@@ -160,7 +160,7 @@ symbols.forEach(symbol => {
 });
 
 document.addEventListener('keydown', (event)=> {
-	if(/^-?\d+(\.\d+)?$/.test(event.key) == true) {
+	if(/\d+|\./.test(event.key) == true) {
 	console.log(/^-?\d+(\.\d+)?$/.test(event.key));
 		if(firstNumber !== "" && firstOperator == "/" && event.key == "0") {
 				display.textContent = "Really!"
@@ -186,8 +186,7 @@ document.addEventListener('keydown', (event)=> {
 				state = "typingSecond";
 			};
 		};
-	} else if (/[+\-*/=()^~%c]/.test(event.key) == true || event.key == "Enter") {
-		if(event.key =="Delete" || event.key == "Backspace") {
+	} else if(event.key === "Delete" || event.key === "Backspace") {
 			if(firstOperator == "" && secondNumber == "") {
 				firstNumber = firstNumber.slice(0, -1);
 				display.textContent = display.textContent.slice(0, -1);
@@ -199,7 +198,7 @@ document.addEventListener('keydown', (event)=> {
 				display.textContent = display.textContent.slice(0, -1);
 			};
 			
-		} else {
+		} else if (/[-+*/=cC]/.test(event.key) == true || event.key === "Enter") {
 
 			/*if(firstOperator !== "" && firstOperator !== "=") {
 				display.textContent = display.textContent.slice(0, -3);
@@ -207,7 +206,7 @@ document.addEventListener('keydown', (event)=> {
 			};*/
 
 			//clear all from the calculator
-			if(event.key == "c" || firstNumber == "") {
+			if(event.key.toLowerCase() === "c" || firstNumber === "") {
 				firstNumber = "";
 				secondNumber = "";
 				firstOperator = "";
@@ -217,18 +216,20 @@ document.addEventListener('keydown', (event)=> {
 				state = "empty";
 			} else {
 
-				display.textContent += " " + event.key + " ";
-
-				if(event.key !== "=" && firstOperator == "") {
-					firstOperator = event.key;
-					state = "operatorSelected";
+				if (event.key !== "Enter") {
+					display.textContent += " " + event.key + " ";
+			}
+				if(event.key !== "=" && event.key !== "Enter") {
+					if (firstOperator == "") {
+						firstOperator = event.key;
+						state = "operatorSelected";
+					} else {
+						secondOperator = event.key;
+						state = "operatorSelected";
 					}
-				else {
-					secondOperator = event.key;
-					state = "operatorSelected";
 				};
 				//do the calculation
-				if(firstNumber !== "" && secondNumber !== "" && event.key !== "=") {
+				if(firstNumber !== "" && secondNumber !== "" && event.key !== "=" && event.key !== "Enter") {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
@@ -254,7 +255,7 @@ document.addEventListener('keydown', (event)=> {
 					state = "resultShown";
 				};
 
-			};
+			
 
 		};
 
