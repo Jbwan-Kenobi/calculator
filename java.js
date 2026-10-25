@@ -28,6 +28,9 @@ const multiply = function(a, b) {
 };
 
 const divide = function(a, b) {
+	if(b === 0) {
+		return "Really!"
+	}
 	return  a / b
 };
 
@@ -53,7 +56,7 @@ var display = document.getElementById("display");
 const keyboard = document.querySelectorAll("buttons");
 
 numbers.forEach(number => {
-	number.addEventListener("click", () => {	
+	number.addEventListener("click", () => {
 		// Divide by 0 response
 		if(firstNumber !== "" && firstOperator == "/" && number.textContent == "0") {
 			display.textContent = "Really!"
@@ -67,28 +70,34 @@ numbers.forEach(number => {
     			answer = 0;
     			state = "empty";
 			}
-
-			if(firstOperator == "") {
-				firstNumber += number.textContent;
-				display.textContent = firstNumber;
-				state = "typingFirst"
+			if(firstOperator === "") {
+				if(number.textContent === ".") {
+					if(firstNumber.includes(".")) {				
+				} else {
+					firstNumber += number.textContent;
+					display.textContent = firstNumber;
+					state = "typingFirst";
+					}
+				} else {
+					firstNumber += number.textContent;
+					display.textContent = firstNumber;
+					state = "typingFirst";
+					} 
 			} else {
-				secondNumber += number.textContent;
-				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-				state = "typingSecond"
+				if(number.textContent === ".") {
+					if(secondNumber.includes(".")) {				
+				} else {
+					secondNumber += number.textContent;
+					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+					state = "typingSecond"
+				}
+				} else {
+					secondNumber += number.textContent;
+					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+					state = "typingSecond"
+					} 
 			};
-			//resets calculator when another number is pressed after equals
-			/*if(answer !== 0) {
-				firstNumber = number.textContent;
-				secondNumber = "";
-				firstOperator = "";
-				answer = 0;
-				display.textContent = firstNumber;
-				console.log("1st O: " + firstOperator + " 1st N: " + firstNumber + " Ans: " + answer);
-			};*/
-
 		};
-
 	});
 });
 
@@ -144,7 +153,7 @@ symbols.forEach(symbol => {
 					state = "resultShown"
 				};
 				//if equals is pressed
-				if(symbol.textContent == "=" && secondNumber !=="") {
+				if(symbol.textContent === "=" && secondNumber !=="") {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
@@ -181,14 +190,32 @@ document.addEventListener('keydown', (event)=> {
     			state = "empty";
 			}
 
-			if(firstOperator == "") {
-				firstNumber += event.key;
-				display.textContent = firstNumber;
-				state = "typingFirst";
+			if(firstOperator === "") {
+				if(event.key === ".") {
+					if(firstNumber.includes(".")) {				
+					} else {
+						firstNumber += event.key;
+						display.textContent = firstNumber;
+						state = "typingFirst";
+					}
+					} else {
+						firstNumber += event.key;
+						display.textContent = firstNumber;
+						state = "typingFirst";
+					} 
 			} else {
-				secondNumber += event.key;
-				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-				state = "typingSecond";
+				if(event.key === ".") {
+					if(secondNumber.includes(".")) {				
+					} else {
+						secondNumber += event.key;
+						display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+						state = "typingSecond"
+					}
+					} else {
+						secondNumber += event.key;
+						display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+						state = "typingSecond"
+					} 
 			};
 		};
 	} else if(event.key === "Delete" || event.key === "Backspace") {
@@ -253,8 +280,6 @@ document.addEventListener('keydown', (event)=> {
 					secondOperator = "";
 					state = "resultShown";
 				};
-
-			
 
 		};
 
