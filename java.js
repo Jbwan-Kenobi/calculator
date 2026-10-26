@@ -259,21 +259,22 @@ document.addEventListener('keydown', (event)=> {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
-					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
-					display.textContent = answer + " " + event.key + " ";
+					answer = operate(firstNumber, secondNumber, calc);
+					display.textContent = (Math.round(answer*10)/10).toString() + " " + event.key + " ";
 					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = secondOperator;
 					secondOperator = ""
 					state = "resultShown";
 				};
+				
 				//if equals is pressed
 				if(event.key == "=" && secondNumber !==""|| event.key == "Enter" && secondNumber !== "") {
 					firstNumber = Number(firstNumber);
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
-					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
-					display.textContent = answer;
+					answer = operate(firstNumber, secondNumber, calc);
+					display.textContent = (Math.round(answer*10)/10).toString();
 					firstNumber = answer.toString();
 					secondNumber = "";
 					firstOperator = "";
