@@ -73,6 +73,29 @@ function calculate() {
 	}
 };
 
+function chainCalculate() {
+	firstNumber = Number(firstNumber);
+	secondNumber = Number(secondNumber);
+	calc = firstOperator;
+	answer = operate(firstNumber, secondNumber, calc);
+	
+	if (answer === "Really!") {
+		display.textContent = "Really!";
+		firstNumber = "";
+		secondNumber = "";
+		firstOperator = "";
+		secondOperator = ""
+		state = "empty"
+	} else {
+		display.textContent = Math.round(answer*10)/10 + " " + secondOperator + " ";
+		firstNumber = answer.toString();
+		secondNumber = "";
+		firstOperator = secondOperator;
+		secondOperator = "";
+		state = "chainResult";
+	}
+};
+
 const numbers = document.querySelectorAll(".number");
 const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
@@ -158,16 +181,7 @@ symbols.forEach(symbol => {
 				};
 				//do the calculation
 				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
-					firstNumber = Number(firstNumber);
-					secondNumber = Number(secondNumber);
-					calc = firstOperator;
-					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
-					display.textContent = answer + " " + symbol.textContent + " ";
-					firstNumber = answer.toString();
-					secondNumber = "";
-					firstOperator = secondOperator;
-					secondOperator = ""
-					state = "resultShown"
+					chainCalculate();
 				};
 				//if equals is pressed
 				if(symbol.textContent === "=" && secondNumber !=="") {
