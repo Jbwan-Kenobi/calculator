@@ -50,6 +50,29 @@ const operate = function(firstNumber, secondNumber,operator) {
 	return "unknown operator";
 };
 
+function calculate() {
+	firstNumber = Number(firstNumber);
+	secondNumber = Number(secondNumber);
+	calc = firstOperator;
+	answer = operate(firstNumber, secondNumber, calc);
+
+	if (answer === "Really!") {
+    		display.textContent = "Really!";
+    		firstNumber = "";
+		secondNumber = "";
+		firstOperator = "";
+		secondOperator = ""
+		state = "empty";    						
+	} else {
+    		display.textContent = (Math.round(answer * 10) / 10).toString();
+		firstNumber = answer.toString();
+		secondNumber = "";
+		firstOperator = "";
+		secondOperator = ""
+		state = "resultShown";
+	}
+};
+
 const numbers = document.querySelectorAll(".number");
 const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
@@ -57,11 +80,6 @@ const keyboard = document.querySelectorAll("buttons");
 
 numbers.forEach(number => {
 	number.addEventListener("click", () => {
-		// Divide by 0 response
-		if(firstNumber !== "" && firstOperator == "/" && number.textContent == "0") {
-			display.textContent = "Really!"
-		} else {
-
 			if(state === "resultShown") {
     			// reset for new calculation
     			firstNumber = "";
@@ -97,7 +115,6 @@ numbers.forEach(number => {
 					state = "typingSecond"
 					} 
 			};
-		};
 	});
 });
 
@@ -154,16 +171,7 @@ symbols.forEach(symbol => {
 				};
 				//if equals is pressed
 				if(symbol.textContent === "=" && secondNumber !=="") {
-					firstNumber = Number(firstNumber);
-					secondNumber = Number(secondNumber);
-					calc = firstOperator;
-					answer = Math.round(operate(firstNumber, secondNumber, calc)*10)/10;
-					display.textContent = answer;
-					firstNumber = answer.toString();
-					secondNumber = "";
-					firstOperator = "";
-					secondOperator = "";
-					state = "resultShown"
+					calculate();
 				};
 
 			};
@@ -176,7 +184,7 @@ symbols.forEach(symbol => {
 document.addEventListener('keydown', (event)=> {
 	if(/\d+|\./.test(event.key) == true) {
 	console.log(/^-?\d+(\.\d+)?$/.test(event.key));
-		if(firstNumber !== "" && firstOperator == "/" && event.key == "0") {
+		if(firstNumber !== "" && firstOperator == "/" && event.key.startsWith === "0") {
 				display.textContent = "Really!"
 		} else {
 
@@ -260,26 +268,25 @@ document.addEventListener('keydown', (event)=> {
 					secondNumber = Number(secondNumber);
 					calc = firstOperator;
 					answer = operate(firstNumber, secondNumber, calc);
-					display.textContent = (Math.round(answer*10)/10).toString() + " " + event.key + " ";
-					firstNumber = answer.toString();
-					secondNumber = "";
-					firstOperator = secondOperator;
-					secondOperator = ""
-					state = "resultShown";
-				};
-				
+					if (answer === "Really!") {
+    						display.textContent = "Really!";
+    						firstNumber = "";
+							secondNumber = "";
+							firstOperator = "";
+							secondOperator = ""
+							state = "empty";    						
+					} else {
+    						display.textContent = (Math.round(answer * 10) / 10).toString() + " " + event.key + " ";
+							firstNumber = answer.toString();
+							secondNumber = "";
+							firstOperator = secondOperator;
+							secondOperator = ""
+							state = "resultShown";
+							}
+				};				
 				//if equals is pressed
 				if(event.key == "=" && secondNumber !==""|| event.key == "Enter" && secondNumber !== "") {
-					firstNumber = Number(firstNumber);
-					secondNumber = Number(secondNumber);
-					calc = firstOperator;
-					answer = operate(firstNumber, secondNumber, calc);
-					display.textContent = (Math.round(answer*10)/10).toString();
-					firstNumber = answer.toString();
-					secondNumber = "";
-					firstOperator = "";
-					secondOperator = "";
-					state = "resultShown";
+					calculate();
 				};
 
 		};
