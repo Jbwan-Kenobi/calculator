@@ -113,6 +113,71 @@ function backspace() {
 	}
 };
 
+function inputNumber(enteredNumber) {
+	if(state === "resultShown") {
+    			// reset for new calculation
+    			firstNumber = "";
+    			secondNumber = "";
+    			firstOperator = "";
+    			answer = 0;
+    			state = "empty";
+			}
+			if(firstOperator === "") {
+				if(enteredNumber === ".") {
+					if(firstNumber.includes(".")) {				
+				} else {
+					firstNumber += enteredNumber;
+					display.textContent = firstNumber;
+					state = "typingFirst";
+					}
+				} else {
+					firstNumber += enteredNumber;
+					display.textContent = firstNumber;
+					state = "typingFirst";
+					} 
+			} else {
+				if(enteredNumber === ".") {
+					if(secondNumber.includes(".")) {				
+				} else {
+					secondNumber += enteredNumber;
+					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+					state = "typingSecond"
+				}
+				} else {
+					secondNumber += enteredNumber;
+					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+					state = "typingSecond"
+					} 
+			};
+};
+
+function inputSymbol(enteredSymbol) {
+	if(enteredSymbol ==="Del" || enteredSymbol === "Delete" || enteredSymbol === "Backspace") {
+		backspace();
+	} else if(enteredSymbol.toLowerCase() === "c") {
+		allClear();
+	} else if(enteredSymbol === "=" || enteredSymbol === "Enter") {
+		if (secondNumber !== "") {
+			result(calculate());
+		}
+	} else {
+		if(firstNumber !== "") {
+			display.textContent += " " + enteredSymbol + " ";
+
+		if(firstOperator === "") {
+			firstOperator = enteredSymbol;
+			state = "operatorSelected";
+		} else {
+			secondOperator = enteredSymbol;
+			state = "operatorSelected";
+		}
+		if(secondNumber !== "") {
+			chainCalculate(calculate());
+			}
+		}
+	}
+};
+
 const numbers = document.querySelectorAll(".number");
 const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
@@ -120,155 +185,24 @@ const keyboard = document.querySelectorAll("buttons");
 
 numbers.forEach(number => {
 	number.addEventListener("click", () => {
-			if(state === "resultShown") {
-    			// reset for new calculation
-    			firstNumber = "";
-    			secondNumber = "";
-    			firstOperator = "";
-    			answer = 0;
-    			state = "empty";
-			}
-			if(firstOperator === "") {
-				if(number.textContent === ".") {
-					if(firstNumber.includes(".")) {				
-				} else {
-					firstNumber += number.textContent;
-					display.textContent = firstNumber;
-					state = "typingFirst";
-					}
-				} else {
-					firstNumber += number.textContent;
-					display.textContent = firstNumber;
-					state = "typingFirst";
-					} 
-			} else {
-				if(number.textContent === ".") {
-					if(secondNumber.includes(".")) {				
-				} else {
-					secondNumber += number.textContent;
-					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-					state = "typingSecond"
-				}
-				} else {
-					secondNumber += number.textContent;
-					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-					state = "typingSecond"
-					} 
-			};
+			inputNumber(number.textContent)
 	});
 });
 
 symbols.forEach(symbol => {
 	symbol.addEventListener("click", () => {
-		//delete last character
-		if(symbol.textContent =="Del") {
-			backspace();
-		} else {
-			//clear all from the calculator
-			if(symbol.textContent == "C") {
-				allClear();
-			} else {
-				//if equals is pressed
-				if(symbol.textContent === "=") {
-					if (secondNumber === "") {
-					} else {
-						result(calculate())
-						}					
-				} else {
-					if(firstNumber === "") {
-					} else {
-						display.textContent += " " + symbol.textContent + " ";
-
-						if(firstOperator === "") {
-							firstOperator = symbol.textContent;
-							state = "operatorSelected"
-						} else {
-							secondOperator = symbol.textContent;
-							state = "operatorSelected"
-						};
-						//do the calculation
-						if(firstNumber !== "" && secondNumber !== "") {
-						chainCalculate(calculate());
-						};
-
-					};
-				};
-			};
-		};
+		inputSymbol(symbol.textContent)
 	});
 });
 
 document.addEventListener('keydown', (event)=> {
 	if(/\d+|\./.test(event.key) == true) {
-			if(state === "resultShown") {
-    			// reset for new calculation
-    			firstNumber = "";
-    			secondNumber = "";
-    			firstOperator = "";
-    			answer = 0;
-    			state = "empty";
-			}
+		inputNumber(event.key)
 
-			if(firstOperator === "") {
-				if(event.key === ".") {
-					if(firstNumber.includes(".")) {				
-					} else {
-						firstNumber += event.key;
-						display.textContent = firstNumber;
-						state = "typingFirst";
-					}
-					} else {
-						firstNumber += event.key;
-						display.textContent = firstNumber;
-						state = "typingFirst";
-					} 
-			} else {
-				if(event.key === ".") {
-					if(secondNumber.includes(".")) {				
-					} else {
-						secondNumber += event.key;
-						display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-						state = "typingSecond"
-					}
-					} else {
-						secondNumber += event.key;
-						display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-						state = "typingSecond"
-					} 
-			};
 	} else if(event.key === "Delete" || event.key === "Backspace") {
-			backspace()
+			inputSymbol(event.key)
 			
 		} else if (/[-+*/=cC]/.test(event.key) == true || event.key === "Enter") {
-			//clear all from the calculator
-			if(event.key.toLowerCase() === "c") {
-				allClear()
-			} else {
-				if(event.key === "=" || event.key === "Enter") {
-					if (secondNumber === "") {
-					} else {
-						result(calculate())
-						}					
-				} else {
-				if(firstNumber ===""){
-				} else { 
-						display.textContent += " " + event.key + " ";
-												
-						if (firstOperator == "") {
-							firstOperator = event.key;
-							state = "operatorSelected";
-						} else {
-							secondOperator = event.key;
-							state = "operatorSelected";
-						}
-						//do the calculation
-						if(firstNumber !== "" && secondNumber !== "") {
-							chainCalculate(calculate());
-						};	
-					};			
-				};
-			};
+			inputSymbol(event.key)
 		};
 });
-
-    
