@@ -168,31 +168,33 @@ symbols.forEach(symbol => {
 			if(symbol.textContent == "C") {
 				allClear();
 			} else {
-				if(firstNumber === "") {
-				} else {
-					display.textContent += " " + symbol.textContent + " ";
-
-					if(symbol.textContent !== "=" && firstOperator == "") {
-						firstOperator = symbol.textContent;
-						state = "operatorSelected"
+				//if equals is pressed
+				if(symbol.textContent === "=") {
+					if (secondNumber === "") {
 					} else {
-						secondOperator = symbol.textContent;
-						state = "operatorSelected"
-					};
-					//do the calculation
-					if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
-						chainCalculate(calculate());
-					};
-					//if equals is pressed
-					if(symbol.textContent === "=" && secondNumber !=="") {
-						result(calculate());
-					};
+						result(calculate())
+						}					
+				} else {
+					if(firstNumber === "") {
+					} else {
+						display.textContent += " " + symbol.textContent + " ";
 
+						if(firstOperator === "") {
+							firstOperator = symbol.textContent;
+							state = "operatorSelected"
+						} else {
+							secondOperator = symbol.textContent;
+							state = "operatorSelected"
+						};
+						//do the calculation
+						if(firstNumber !== "" && secondNumber !== "") {
+						chainCalculate(calculate());
+						};
+
+					};
 				};
 			};
-
 		};
-
 	});
 });
 
@@ -242,31 +244,31 @@ document.addEventListener('keydown', (event)=> {
 			if(event.key.toLowerCase() === "c") {
 				allClear()
 			} else {
+				if(event.key === "=" || event.key === "Enter") {
+					if (secondNumber === "") {
+					} else {
+						result(calculate())
+						}					
+				} else {
 				if(firstNumber ===""){
-				} else { if (event.key !== "Enter") {
+				} else { 
 						display.textContent += " " + event.key + " ";
+												
+						if (firstOperator == "") {
+							firstOperator = event.key;
+							state = "operatorSelected";
+						} else {
+							secondOperator = event.key;
+							state = "operatorSelected";
 						}
-						if(event.key !== "=" && event.key !== "Enter") {
-							if (firstOperator == "") {
-								firstOperator = event.key;
-								state = "operatorSelected";
-							} else {
-								secondOperator = event.key;
-								state = "operatorSelected";
-							}
-						};
 						//do the calculation
-						if(firstNumber !== "" && secondNumber !== "" && event.key !== "=" && event.key !== "Enter") {
+						if(firstNumber !== "" && secondNumber !== "") {
 							chainCalculate(calculate());
-						};				
-						//if equals is pressed
-						if(secondNumber !== "" && (event.key === "=" || event.key === "Enter")) {
-							result(calculate());
-						};
+						};	
+					};			
 				};
+			};
 		};
-	};
-});	
-
+});
 
     
