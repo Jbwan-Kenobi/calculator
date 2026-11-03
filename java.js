@@ -13,6 +13,9 @@ const allClear = function() {
 	answer = 0;
 	state = "empty";
 	display.textContent = "";
+	console.log("ALL CLEAR CALLED");
+console.log("First Number:", firstNumber);
+console.log("Current State:", state);
 };
 
 const add = function(a, b) {
@@ -55,45 +58,54 @@ function calculate() {
 	secondNumber = Number(secondNumber);
 	calc = firstOperator;
 	answer = operate(firstNumber, secondNumber, calc);
-
+	console.log("Calculated answer:", answer);
+	
 	if (answer === "Really!") {
-    		display.textContent = "Really!";
-    		firstNumber = "";
+    	display.textContent = "Really!";
+    	firstNumber = "";
 		secondNumber = "";
 		firstOperator = "";
 		secondOperator = ""
 		state = "empty";    						
-	} else {
-    		display.textContent = (Math.round(answer * 10) / 10).toString();
-		firstNumber = answer.toString();
-		secondNumber = "";
-		firstOperator = "";
-		secondOperator = ""
-		state = "resultShown";
 	}
+	return answer
 };
 
-function chainCalculate() {
-	firstNumber = Number(firstNumber);
-	secondNumber = Number(secondNumber);
-	calc = firstOperator;
-	answer = operate(firstNumber, secondNumber, calc);
-	
-	if (answer === "Really!") {
-		display.textContent = "Really!";
-		firstNumber = "";
+function result(solution) {
+		if(solution ==="Really!") return;
+		
+ 		display.textContent = (Math.round(solution * 10) / 10).toString();
+		firstNumber = solution.toString();
 		secondNumber = "";
 		firstOperator = "";
-		secondOperator = ""
-		state = "empty"
-	} else {
-		display.textContent = Math.round(answer*10)/10 + " " + secondOperator + " ";
-		firstNumber = answer.toString();
+		secondOperator = "";
+		state = "resultShown";
+		console.log("Result function called:", solution);
+		console.log("Current state:", state);
+};
+
+function chainCalculate(solution) {
+		if(solution ==="Really!") return;
+		
+		display.textContent = Math.round(solution*10)/10 + " " + secondOperator + " ";
+		firstNumber = solution.toString();
 		secondNumber = "";
 		firstOperator = secondOperator;
 		secondOperator = "";
 		state = "chainResult";
-	}
+};
+
+function backspace() {
+	if(firstOperator == "" && secondNumber == "") {
+		firstNumber = firstNumber.slice(0, -1);
+		display.textContent = display.textContent.slice(0, -1);
+	} else if(firstNumber !== "" && firstOperator !== "" && secondNumber =="") {
+			firstOperator = ""
+			display.textContent = display.textContent.slice(0, -3);
+	} else {
+		secondNumber = secondNumber.slice(0, -1);
+		display.textContent = display.textContent.slice(0, -1);
+		};		 
 };
 
 const numbers = document.querySelectorAll(".number");
@@ -145,26 +157,10 @@ symbols.forEach(symbol => {
 	symbol.addEventListener("click", () => {
 		//delete last character
 		if(symbol.textContent =="Del") {
-			if(firstOperator == "" && secondNumber == "") {
-				firstNumber = firstNumber.slice(0, -1);
-				display.textContent = display.textContent.slice(0, -1);
-			} else if(firstNumber !== "" && firstOperator !== "" && secondNumber =="") {
-				firstOperator = ""
-				display.textContent = display.textContent.slice(0, -3);
-			} else {
-				secondNumber = secondNumber.slice(0, -1);
-				display.textContent = display.textContent.slice(0, -1);
-			};
-			
+			backspace();
 		} else {
-
-			/*if(firstOperator !== "" && firstOperator !== "=") {
-				display.textContent = display.textContent.slice(0, -3);
-				firstOperator = "";
-			};*/
-
 			//clear all from the calculator
-			if(symbol.textContent == "C" || firstNumber == "") {
+			if(symbol.textContent == "C") {
 				allClear();
 
 			} else {
@@ -181,11 +177,11 @@ symbols.forEach(symbol => {
 				};
 				//do the calculation
 				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
-					chainCalculate();
+					chainCalculate(calculate());
 				};
 				//if equals is pressed
 				if(symbol.textContent === "=" && secondNumber !=="") {
-					calculate();
+					result(calculate());
 				};
 
 			};
@@ -241,16 +237,7 @@ document.addEventListener('keydown', (event)=> {
 			};
 		};
 	} else if(event.key === "Delete" || event.key === "Backspace") {
-			if(firstOperator == "" && secondNumber == "") {
-				firstNumber = firstNumber.slice(0, -1);
-				display.textContent = display.textContent.slice(0, -1);
-			} else if(firstNumber !== "" && firstOperator !== "" && secondNumber =="") {
-				firstOperator = ""
-				display.textContent = display.textContent.slice(0, -3);
-			} else {
-				secondNumber = secondNumber.slice(0, -1);
-				display.textContent = display.textContent.slice(0, -1);
-			};
+			backspace()
 			
 		} else if (/[-+*/=cC]/.test(event.key) == true || event.key === "Enter") {
 
@@ -260,10 +247,14 @@ document.addEventListener('keydown', (event)=> {
 			};*/
 
 			//clear all from the calculator
-			if(event.key.toLowerCase() === "c" || firstNumber === "") {
+			if(event.key.toLowerCase() === "c") {
 				allClear()
 			} else {
-
+console.log("First Number:", firstNumber);
+console.log("Second Number:", secondNumber);
+console.log("First Operator:", firstOperator);
+console.log("Second Operator:", secondOperator);
+console.log("Current State:", state);
 				if (event.key !== "Enter") {
 					display.textContent += " " + event.key + " ";
 			}
@@ -278,34 +269,16 @@ document.addEventListener('keydown', (event)=> {
 				};
 				//do the calculation
 				if(firstNumber !== "" && secondNumber !== "" && event.key !== "=" && event.key !== "Enter") {
-					firstNumber = Number(firstNumber);
-					secondNumber = Number(secondNumber);
-					calc = firstOperator;
-					answer = operate(firstNumber, secondNumber, calc);
-					if (answer === "Really!") {
-    						display.textContent = "Really!";
-    						firstNumber = "";
-							secondNumber = "";
-							firstOperator = "";
-							secondOperator = ""
-							state = "empty";    						
-					} else {
-    						display.textContent = (Math.round(answer * 10) / 10).toString() + " " + event.key + " ";
-							firstNumber = answer.toString();
-							secondNumber = "";
-							firstOperator = secondOperator;
-							secondOperator = ""
-							state = "resultShown";
-							}
+					chainCalculate(calculate());
 				};				
 				//if equals is pressed
 				if(event.key == "=" && secondNumber !==""|| event.key == "Enter" && secondNumber !== "") {
-					calculate();
+					result(calculate());
 				};
 
 		};
 
 	};
 	console.log(event.key);
-});
+});	
     
