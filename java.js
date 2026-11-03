@@ -13,9 +13,6 @@ const allClear = function() {
 	answer = 0;
 	state = "empty";
 	display.textContent = "";
-	console.log("ALL CLEAR CALLED");
-console.log("First Number:", firstNumber);
-console.log("Current State:", state);
 };
 
 const add = function(a, b) {
@@ -58,7 +55,6 @@ function calculate() {
 	secondNumber = Number(secondNumber);
 	calc = firstOperator;
 	answer = operate(firstNumber, secondNumber, calc);
-	console.log("Calculated answer:", answer);
 	
 	if (answer === "Really!") {
     	display.textContent = "Really!";
@@ -80,8 +76,6 @@ function result(solution) {
 		firstOperator = "";
 		secondOperator = "";
 		state = "resultShown";
-		console.log("Result function called:", solution);
-		console.log("Current state:", state);
 };
 
 function chainCalculate(solution) {
@@ -99,13 +93,24 @@ function backspace() {
 	if(firstOperator == "" && secondNumber == "") {
 		firstNumber = firstNumber.slice(0, -1);
 		display.textContent = display.textContent.slice(0, -1);
+		if(firstNumber.length < 1) {
+			state = "empty"
+			} else {
+			state = "typingFirst"
+			}
 	} else if(firstNumber !== "" && firstOperator !== "" && secondNumber =="") {
 			firstOperator = ""
 			display.textContent = display.textContent.slice(0, -3);
+			state = "typingFirst"
 	} else {
 		secondNumber = secondNumber.slice(0, -1);
 		display.textContent = display.textContent.slice(0, -1);
-		};		 
+		if(secondNumber.length < 1) {
+		state = "operatorSelected"
+		} else {
+		state = "typingSecond"
+		};			 
+	}
 };
 
 const numbers = document.querySelectorAll(".number");
@@ -162,28 +167,28 @@ symbols.forEach(symbol => {
 			//clear all from the calculator
 			if(symbol.textContent == "C") {
 				allClear();
-
 			} else {
+				if(firstNumber === "") {
+				} else {
+					display.textContent += " " + symbol.textContent + " ";
 
-				display.textContent += " " + symbol.textContent + " ";
+					if(symbol.textContent !== "=" && firstOperator == "") {
+						firstOperator = symbol.textContent;
+						state = "operatorSelected"
+					} else {
+						secondOperator = symbol.textContent;
+						state = "operatorSelected"
+					};
+					//do the calculation
+					if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
+						chainCalculate(calculate());
+					};
+					//if equals is pressed
+					if(symbol.textContent === "=" && secondNumber !=="") {
+						result(calculate());
+					};
 
-				if(symbol.textContent !== "=" && firstOperator == "") {
-					firstOperator = symbol.textContent;
-					state = "operatorSelected"
-					}
-				else {
-					secondOperator = symbol.textContent;
-					state = "operatorSelected"
 				};
-				//do the calculation
-				if(firstNumber !== "" && secondNumber !== "" && symbol.textContent !== "=") {
-					chainCalculate(calculate());
-				};
-				//if equals is pressed
-				if(symbol.textContent === "=" && secondNumber !=="") {
-					result(calculate());
-				};
-
 			};
 
 		};
@@ -193,18 +198,12 @@ symbols.forEach(symbol => {
 
 document.addEventListener('keydown', (event)=> {
 	if(/\d+|\./.test(event.key) == true) {
-	console.log(/^-?\d+(\.\d+)?$/.test(event.key));
-		if(firstNumber !== "" && firstOperator == "/" && event.key.startsWith === "0") {
-				display.textContent = "Really!"
-		} else {
-
 			if(state === "resultShown") {
     			// reset for new calculation
     			firstNumber = "";
     			secondNumber = "";
     			firstOperator = "";
     			answer = 0;
-				display.textContent = "";
     			state = "empty";
 			}
 
@@ -235,50 +234,39 @@ document.addEventListener('keydown', (event)=> {
 						state = "typingSecond"
 					} 
 			};
-		};
 	} else if(event.key === "Delete" || event.key === "Backspace") {
 			backspace()
 			
 		} else if (/[-+*/=cC]/.test(event.key) == true || event.key === "Enter") {
-
-			/*if(firstOperator !== "" && firstOperator !== "=") {
-				display.textContent = display.textContent.slice(0, -3);
-				firstOperator = "";
-			};*/
-
 			//clear all from the calculator
 			if(event.key.toLowerCase() === "c") {
 				allClear()
 			} else {
-console.log("First Number:", firstNumber);
-console.log("Second Number:", secondNumber);
-console.log("First Operator:", firstOperator);
-console.log("Second Operator:", secondOperator);
-console.log("Current State:", state);
-				if (event.key !== "Enter") {
-					display.textContent += " " + event.key + " ";
-			}
-				if(event.key !== "=" && event.key !== "Enter") {
-					if (firstOperator == "") {
-						firstOperator = event.key;
-						state = "operatorSelected";
-					} else {
-						secondOperator = event.key;
-						state = "operatorSelected";
-					}
+				if(firstNumber ===""){
+				} else { if (event.key !== "Enter") {
+						display.textContent += " " + event.key + " ";
+						}
+						if(event.key !== "=" && event.key !== "Enter") {
+							if (firstOperator == "") {
+								firstOperator = event.key;
+								state = "operatorSelected";
+							} else {
+								secondOperator = event.key;
+								state = "operatorSelected";
+							}
+						};
+						//do the calculation
+						if(firstNumber !== "" && secondNumber !== "" && event.key !== "=" && event.key !== "Enter") {
+							chainCalculate(calculate());
+						};				
+						//if equals is pressed
+						if(secondNumber !== "" && (event.key === "=" || event.key === "Enter")) {
+							result(calculate());
+						};
 				};
-				//do the calculation
-				if(firstNumber !== "" && secondNumber !== "" && event.key !== "=" && event.key !== "Enter") {
-					chainCalculate(calculate());
-				};				
-				//if equals is pressed
-				if(event.key == "=" && secondNumber !==""|| event.key == "Enter" && secondNumber !== "") {
-					result(calculate());
-				};
-
 		};
-
 	};
-	console.log(event.key);
 });	
+
+
     
