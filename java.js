@@ -51,7 +51,7 @@ const operate = function (firstNumber, secondNumber, operator) {
 function calculate() {
 	firstNumber = Number(firstNumber);
 	secondNumber = Number(secondNumber);
-	answer = operate(firstNumber, secondNumber, firstOperator);
+	const answer = operate(firstNumber, secondNumber, firstOperator);
 
 	if (answer === "Really!") {
 		display.textContent = "Really!";
@@ -85,7 +85,7 @@ function chainCalculate(solution) {
 	secondOperator = "";
 	state = "chainResult";
 };
-
+//known backspace issue after getting a decimal answer
 function backspace() {
 	if (state === "resultShown" || state === "error") {
 		allClear();
