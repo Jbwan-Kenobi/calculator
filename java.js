@@ -53,8 +53,7 @@ const operate = function(firstNumber, secondNumber,operator) {
 function calculate() {
 	firstNumber = Number(firstNumber);
 	secondNumber = Number(secondNumber);
-	calc = firstOperator;
-	answer = operate(firstNumber, secondNumber, calc);
+	answer = operate(firstNumber, secondNumber, firstOperator);
 	
 	if (answer === "Really!") {
     	display.textContent = "Really!";
@@ -161,20 +160,23 @@ function inputSymbol(enteredSymbol) {
 			result(calculate());
 		}
 	} else {
-		if(firstNumber !== "") {
-			display.textContent += " " + enteredSymbol + " ";
-
-		if(firstOperator === "") {
-			firstOperator = enteredSymbol;
-			state = "operatorSelected";
-		} else {
-			secondOperator = enteredSymbol;
-			state = "operatorSelected";
-		}
-		if(secondNumber !== "") {
-			chainCalculate(calculate());
+		if(firstNumber !== "") {	
+			if(secondNumber === "") {
+				if(firstOperator === "") {
+					display.textContent += " " + enteredSymbol + " ";
+				} else {
+					display.textContent = display.textContent.slice(0, -3);
+					display.textContent += " " + enteredSymbol + " ";
+				}
+				firstOperator = enteredSymbol;
+			} else {
+				secondOperator = enteredSymbol;
 			}
-		}
+	state = "operatorSelected";
+	}
+}
+	if(secondNumber !== "") {
+		chainCalculate(calculate());
 	}
 };
 
