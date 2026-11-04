@@ -2,7 +2,6 @@ let firstNumber = "";
 let secondNumber = "";
 let firstOperator = "";
 let secondOperator = "";
-let answer = 0;
 let state = "empty";
 
 const allClear = function () {
@@ -10,7 +9,6 @@ const allClear = function () {
 	secondNumber = "";
 	firstOperator = "";
 	secondOperator = "";
-	answer = 0;
 	state = "empty";
 	display.textContent = "";
 };
@@ -61,7 +59,7 @@ function calculate() {
 		secondNumber = "";
 		firstOperator = "";
 		secondOperator = ""
-		state = "empty";
+		state = "error";
 	}
 	return answer
 };
@@ -89,12 +87,9 @@ function chainCalculate(solution) {
 };
 
 function backspace() {
-	if (answer === "Really!") {
-		firstNumber = "";
-		answer ="";
-		display.textContent = "";
-		state = "empty"
-	} else if (firstOperator == "" && secondNumber == "") {
+	if (state === "resultShown" || state === "error") {
+		allClear();
+	} else if (firstOperator === "" && secondNumber === "") {
 		firstNumber = firstNumber.slice(0, -1);
 		display.textContent = display.textContent.slice(0, -1);
 		if (firstNumber.length < 1) {
@@ -102,7 +97,7 @@ function backspace() {
 		} else {
 			state = "typingFirst"
 		}
-	} else if (firstNumber !== "" && firstOperator !== "" && secondNumber == "") {
+	} else if (firstNumber !== "" && firstOperator !== "" && secondNumber === "") {
 		firstOperator = ""
 		secondOperator = ""
 		display.textContent = display.textContent.slice(0, -3);
@@ -120,12 +115,11 @@ function backspace() {
 
 function inputNumber(enteredNumber) {
 	if (state === "resultShown") {
-		if(enteredNumber === ".") return
+		if (enteredNumber === ".") return
 		// reset for new calculation
 		firstNumber = "";
 		secondNumber = "";
 		firstOperator = "";
-		answer = 0;
 		state = "empty";
 	}
 	if (firstOperator === "") {
