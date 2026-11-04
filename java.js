@@ -99,6 +99,7 @@ function backspace() {
 			}
 	} else if(firstNumber !== "" && firstOperator !== "" && secondNumber =="") {
 			firstOperator = ""
+			secondOperator = ""
 			display.textContent = display.textContent.slice(0, -3);
 			state = "typingFirst"
 	} else {
@@ -114,40 +115,41 @@ function backspace() {
 
 function inputNumber(enteredNumber) {
 	if(state === "resultShown") {
-    			// reset for new calculation
-    			firstNumber = "";
-    			secondNumber = "";
-    			firstOperator = "";
-    			answer = 0;
-    			state = "empty";
-			}
-			if(firstOperator === "") {
-				if(enteredNumber === ".") {
-					if(firstNumber.includes(".")) {				
+    	// reset for new calculation
+    	firstNumber = "";
+		secondNumber = "";
+		firstOperator = "";
+  		answer = 0;
+    	state = "empty";
+	}
+		if(firstOperator === "") {
+			if(enteredNumber === ".") {
+				if(firstNumber === "" || firstNumber.includes(".")) {							
 				} else {
 					firstNumber += enteredNumber;
 					display.textContent = firstNumber;
 					state = "typingFirst";
-					}
-				} else {
-					firstNumber += enteredNumber;
-					display.textContent = firstNumber;
-					state = "typingFirst";
-					} 
-			} else {
-				if(enteredNumber === ".") {
-					if(secondNumber.includes(".")) {				
-				} else {
-					secondNumber += enteredNumber;
-					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-					state = "typingSecond"
 				}
+			} else {
+					firstNumber += enteredNumber;
+					display.textContent = firstNumber;
+					state = "typingFirst";
+			} 
+					
+		} else {
+			if(enteredNumber === ".") {
+				if(secondNumber === "" || secondNumber.includes(".")) {				
 				} else {
 					secondNumber += enteredNumber;
 					display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
-					state = "typingSecond"
-					} 
-			};
+					state = "typingSecond";
+				}
+			} else {
+				secondNumber += enteredNumber;
+				display.textContent = firstNumber + " " + firstOperator + " " + secondNumber;
+				state = "typingSecond";
+			}
+	}	
 };
 
 function inputSymbol(enteredSymbol) {
@@ -183,7 +185,6 @@ function inputSymbol(enteredSymbol) {
 const numbers = document.querySelectorAll(".number");
 const symbols = document.querySelectorAll(".symbol");
 var display = document.getElementById("display");
-const keyboard = document.querySelectorAll("buttons");
 
 numbers.forEach(number => {
 	number.addEventListener("click", () => {
